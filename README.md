@@ -1,27 +1,28 @@
-# 🛠 SimpleMySQL
+# 🛠️ SimpleMySQL — Lightweight MySQL Library for PHP
 
-**SimpleMySQL** is a lightweight PHP class for interacting with MySQL databases via `mysqli`.  
-It supports safe queries, transactions, JSON cache reading, and server variable access.
+**SimpleMySQL** is a lightweight 💡 and minimalistic 📦 PHP library for working with MySQL using `mysqli`.  
+It’s designed to make SQL interaction in your PHP projects easier, cleaner, and safer — **no frameworks required!**
 
 ---
 
-## 📦 Features
+## ✨ Key Features
 
 - 🔐 Safe prepared statements with parameter binding  
-- 🔁 Full transaction control (`start()`, `finish()`, `stop()`)  
-- 📄 Fetch single row or full result  
-- 💾 JSON file reading support  
-- ⚙ Access server variables like `max_connections`  
-- 🌐 UTF-8 charset by default + autocommit disabled
+- 🔁 Full transaction control: <code>start()</code> / <code>finish()</code> / <code>stop()</code>  
+- 📋 Fetch one or many rows easily  
+- 📂 Read cached JSON files for fast offline access  
+- ⚙ Get server variables like <code>max_connections</code>  
+- 🌐 UTF-8 charset by default  
+- 🧩 Fully standalone — no dependencies!
 
 ---
 
-## 🚀 Usage
+## 🚀 Quick Start
 
-### 🧱 Initialize the class
+### 📦 Initialize the class
 
 <pre><code>
-require_once 'SimpleMySQL.php';
+require_once 'database.php';
 $db = new SimpleMySQL();
 </code></pre>
 
@@ -36,10 +37,10 @@ echo $user['name'];
 
 ---
 
-### 📋 Fetch all rows
+### 📄 Fetch multiple rows
 
 <pre><code>
-$users = $db->fetchAll("SELECT * FROM users WHERE role = ?", ['admin']);
+$users = $db->fetchAll("SELECT * FROM users WHERE status = ?", ['active']);
 foreach ($users as $user) {
     echo $user['email'] . "&lt;br&gt;";
 }
@@ -47,56 +48,56 @@ foreach ($users as $user) {
 
 ---
 
-### 📝 Execute update / insert / delete
+### 📝 Execute insert / update / delete
 
 <pre><code>
-$db->execute("UPDATE users SET name = ? WHERE id = ?", ['Temirkhan', 2]);
+$db->execute("UPDATE users SET role = ? WHERE id = ?", ['admin', 3]);
 </code></pre>
 
 ---
 
-### 🔢 Get last inserted ID
+### 🆔 Get last inserted ID
 
 <pre><code>
-$db->execute("INSERT INTO users (name) VALUES (?)", ['NewUser']);
+$db->execute("INSERT INTO logs (message) VALUES (?)", ['User added']);
 $id = $db->lastInsertId();
 </code></pre>
 
 ---
 
-### 🔄 Transaction control
+### 🔁 Transaction example
 
 <pre><code>
 $db->start();
 
 try {
-    $db->execute("INSERT INTO logs (action) VALUES (?)", ['test']);
-    $db->execute("UPDATE users SET status = ? WHERE id = ?", ['active', 1]);
-    $db->finish(); // Commit
+    $db->execute("DELETE FROM sessions WHERE user_id = ?", [2]);
+    $db->execute("UPDATE users SET status = ? WHERE id = ?", ['inactive', 2]);
+    $db->finish(); // ✅ commit
 } catch (Exception $e) {
-    $db->stop(); // Rollback
+    $db->stop(); // ❌ rollback
 }
 </code></pre>
 
 ---
 
-### 📥 Read data from JSON cache file
+### 📥 Read data from JSON cache
 
 <pre><code>
-$data = $db->readCache('cache/users.json');
+$data = $db->readCache('cache/data.json');
 if ($data) {
     foreach ($data as $row) {
-        echo $row['name'] . "&lt;br&gt;";
+        echo $row['title'] . "&lt;br&gt;";
     }
 }
 </code></pre>
 
 ---
 
-### ⚙ Get server variable
+### ⚙ Get MySQL server variable
 
 <pre><code>
-echo $db->getVariable("max_connections");
+echo "Max Connections: " . $db->getVariable("max_connections");
 </code></pre>
 
 ---
@@ -109,9 +110,18 @@ $db->close();
 
 ---
 
+## ✅ When to Use It?
+
+- You need a lightweight PHP tool to connect to MySQL ✅  
+- You don’t want heavy frameworks ❌  
+- You want safety and clarity 🔐  
+- You just want to get things done 🧠
+
+---
+
 ## 📄 License
 
 MIT — free to use and modify.
 
-> Developer: <strong>Temirkhan</strong>  
+> Built with ❤️ by <strong>Temirkhan</strong>  
 > <a href="https://www.instagram.com/temirkhanrustemov/">@temirkhanrustemov</a> • <code>temirkhan.onyx@gmail.com</code>
